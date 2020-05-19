@@ -1,0 +1,69 @@
+<html>
+<body>
+
+<p id="heading">Welcome to device hasher</p>
+<p id="browserprint"></p>
+<p id="component"></p>
+<p id="devhash"></p>
+<p id="demo">BrowserFingerPrint?</p>
+
+
+<script src="client.min.js"></script>
+<script src="cbfjs.min.js"></script>
+<script src="fingerprint2.min.js"></script>
+<script>
+
+var options = {
+              excludes:{userAgent: true,sessionStorage:true,localStorage:true,indexedDb:true,addBehavior:true,openDatabase:true,doNotTrack:true,plugins:true,canvas:true,webgl:true,adBlock:true,fonts	:true,audio:true,enumerateDevices:true,webdriver:true,deviceMemory:true,webglVendorAndRenderer:true,hasLiedOs:true,touchSupport:true,language:true,fontsFlash:true,cpuClass:true,timezone:true,pixelRatio:true,hardwareConcurrency:true}
+              }//set of params which has to be excluded in fingerprintjs
+               //After removing all the browser based dependencies by cross checking the fingerprint from my internet explorer
+
+
+if (window.requestIdleCallback) {
+    requestIdleCallback(function () {
+        Fingerprint2.get(function (components) {
+          console.log(components) // an array of components: {key: ..., value: ...}
+          })
+       
+        Fingerprint2.getV18(options, function (result, components) {
+          document.getElementById("component").innerHTML = "components included are: "+ JSON.stringify(components);
+          document.getElementById("devhash").innerHTML = "FingerprintJS hash id is: "+ result;
+          console.log("hash is"+result)
+          console.log("data points taken :"+components)
+                                                                    })
+    })
+} else 
+
+{
+    setTimeout(function () {
+      
+      Fingerprint2.getV18(options, function (result, components) {
+          document.getElementById("component").innerHTML = "components included are: "+ JSON.stringify(components);
+          document.getElementById("devhash").innerHTML = "FingerprintJS hash id is: "+ result;
+          console.log("FingerprintJS hash is"+result)
+          console.log("data points taken :"+components)
+                                                                 }) 
+                            }, 500)
+}
+//All code regarding Fingerprintjs2 ends here
+
+
+var devFinder=new CBFjs();
+
+devFinder.get(function(hash, components) 
+  {
+    document.getElementById("heading").innerHTML = "your CBFJs device id is: "+ hash; //Based on CBFjs, works on mobile as far as i have checked
+    console.log(components)
+  }) 
+//Above code based on CBFjs
+
+
+  var client = new ClientJS();
+  var fingerprint = client.getFingerprint();
+  document.getElementById("demo").innerHTML = "CLientJS Finger Print is:  "+fingerprint;
+   
+//Above code based on ClientJS
+</script>
+
+</body>
+</html>
